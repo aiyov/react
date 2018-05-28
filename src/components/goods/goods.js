@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Cartcontrol from '../cartcontrol/cartcontrol'
 import BScroll from 'better-scroll';
 import './goods.styl';
 import data from '../../data.json';
@@ -140,7 +141,7 @@ export default class Goods extends Component {
                                                                 ) : null}
                                                             </div>
                                                             <div className="cartcontrol-wrapper">
-                                                                {/*<cartcontrol @add="addFood" :food="food"></cartcontrol>*/}
+                                                                <Cartcontrol add={this.addFood} food={food}></Cartcontrol>
                                                             </div>
                                                         </div>
                                                     </li>
