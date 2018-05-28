@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Cartcontrol from '../cartcontrol/cartcontrol'
+import Shopcart from '../shopcart/shopcart'
 import BScroll from 'better-scroll';
 import './goods.styl';
 import data from '../../data.json';
@@ -131,8 +132,7 @@ export default class Goods extends Component {
                                                             <h2 className="name">{food.name}</h2>
                                                             <p className="desc">{food.description}</p>
                                                             <div className="extra">
-                                                        <span
-                                                            className="count">月售{food.sellCount}份</span><span>好评率{food.rating}%</span>
+                                                        <span className="count">月售{food.sellCount}份</span><span>好评率{food.rating}%</span>
                                                             </div>
                                                             <div className="price">
                                                                 <span className="now">￥{food.price}</span>
@@ -153,7 +153,7 @@ export default class Goods extends Component {
                             })}
                         </ul>
                     </div>
-                    {/*< shopcartref = "shopcart" :selectFoods = "selectFoods"  :deliveryPrice = "seller.deliveryPrice" :minPrice = "seller.minPrice" > < /shopcart>*/}
+                    < Shopcart  selectFoods = {this.state.selectFoods}  deliveryPrice = {data.seller.deliveryPrice} minPrice = {data.seller.minPrice} ></Shopcart>
                 </div>
                 {/*<food @add="addFood" :food="selectedFood" ref="food"></food>*/}
             </div>
