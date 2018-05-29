@@ -11,6 +11,7 @@ export default class Goods extends Component {
         this.state = {
             classMap: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
             goods: data.goods,
+            selectFoods: [],
             currentIndex: 0,
             listHeight: [],
             scrollY: 0,
@@ -19,6 +20,7 @@ export default class Goods extends Component {
         this.goodsList = React.createRef();
         this.meunScroll = null;
         this.foodsScroll = null;
+        this.addFood = this.addFood.bind(this);
         this.selectMenu = this.selectMenu.bind(this);
         this._initScroll = this._initScroll.bind(this);
         this._followScroll = this._followScroll.bind(this);
@@ -90,7 +92,32 @@ export default class Goods extends Component {
         /*this.setState({
             currentIndex: index
         })*/
-        this.foodsScroll.scrollToElement(el, 200, 0,5);
+        this.foodsScroll.scrollToElement(el, 200, 0, 5);
+    }
+
+    addFood(index_parent, index,desc) {
+        var selectFoods = [];
+        var food = this.state.goods;
+        if(desc === 'crease') {
+            !food[index_parent].foods[index].count ? food[index_parent].foods[index].count = 1 : food[index_parent].foods[index].count++;
+        } else {
+            food[index_parent].foods[index].count--;
+        }
+        this.setState({
+            goods: food
+        })
+
+        this.state.goods.forEach(function (item, index) {
+            item.foods.forEach(function (item, i) {
+                if(item.count && item.count > 0) {
+                    selectFoods.push(item)
+                }
+            })
+        })
+        console.log(selectFoods)
+        this.setState({
+            selectFoods
+        })
     }
 
     render() {
@@ -117,9 +144,9 @@ export default class Goods extends Component {
                     </div>
                     <div className="foods-wrapper" ref={this.goodsList}>
                         <ul>
-                            {this.state.goods.map((item, index) => {
+                            {this.state.goods.map((item, index_parent) => {
                                 return (
-                                    <li ref={this.goodsItem} key={index} className="food-list">
+                                    <li ref={this.goodsItem} key={index_parent} className="food-list">
                                         <h1 className="title">{item.name}</h1>
                                         <ul>
                                             {item.foods.map((food, index) => {
@@ -132,7 +159,7 @@ export default class Goods extends Component {
                                                             <h2 className="name">{food.name}</h2>
                                                             <p className="desc">{food.description}</p>
                                                             <div className="extra">
-                                                        <span className="count">月售{food.sellCount}份</span><span>好评率{food.rating}%</span>
+                                                                <span className="count">月售{food.sellCount}份</span><span>好评率{food.rating}%</span>
                                                             </div>
                                                             <div className="price">
                                                                 <span className="now">￥{food.price}</span>
@@ -141,7 +168,9 @@ export default class Goods extends Component {
                                                                 ) : null}
                                                             </div>
                                                             <div className="cartcontrol-wrapper">
-                                                                <Cartcontrol add={this.addFood} food={food}></Cartcontrol>
+                                                                <Cartcontrol index_parent={index_parent} index={index}
+                                                                             add={this.addFood}
+                                                                             food={food}></Cartcontrol>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -153,7 +182,8 @@ export default class Goods extends Component {
                             })}
                         </ul>
                     </div>
-                    < Shopcart  selectFoods = {this.state.selectFoods}  deliveryPrice = {data.seller.deliveryPrice} minPrice = {data.seller.minPrice} ></Shopcart>
+                    < Shopcart selectFoods={this.state.selectFoods} deliveryPrice={data.seller.deliveryPrice}
+                               minPrice={data.seller.minPrice}></Shopcart>
                 </div>
                 {/*<food @add="addFood" :food="selectedFood" ref="food"></food>*/}
             </div>

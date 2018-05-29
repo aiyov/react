@@ -4,10 +4,10 @@ import Cartcontrol from '../cartcontrol/cartcontrol';
 import './shopcart.styl';
 
 export default class Shopcart extends Component {
-    constructor(props){
+    constructor(props) {
         super();
         this.state = {
-            balls: [{show: false},{show: false},{show: false},{show: false}],
+            balls: [{show: false}, {show: false}, {show: false}, {show: false}],
             dropBalls: [],
             fold: true,
             totalPrice: 0,
@@ -19,6 +19,7 @@ export default class Shopcart extends Component {
         this.toggleList = this.toggleList.bind(this)
         this.pay = this.pay.bind(this)
     }
+
     toggleList() {
         if (!this.state.totalCount) {
             return;
@@ -28,12 +29,45 @@ export default class Shopcart extends Component {
             fold: onOff
         })
     }
+
     pay() {
         if (this.state.totalPrice < this.props.minPrice) {
             return;
         }
         window.alert(`支付${this.state.totalPrice}元`);
     }
+
+    componentDidUpdate() {
+        var total = 0;
+        var totalCount = 0;
+        this.props.selectFoods.forEach((item, index) => {
+            total += item.price*item.count;
+            totalCount += item.count;
+        });
+        var payDesc = '';
+        var payClass = 'not-enough'
+        if (total === 0) {
+            payDesc = `￥${this.props.minPrice}元起送`;
+            payClass = 'not-enough'
+        } else if (total < this.props.minPrice) {
+            payDesc = `还差￥${this.props.minPrice - total}元起送`;
+            payClass = 'not-enough'
+        } else {
+            payDesc = `去结算`;
+            payClass = 'enough'
+        }
+        console.log(total)
+        if (total === this.state.totalPrice) {
+            return false
+        }
+        this.setState({
+            payDesc,
+            payClass,
+            totalPrice: total,
+            totalCount
+        })
+    }
+
     render() {
         return (
             <div>
@@ -88,7 +122,8 @@ export default class Shopcart extends Component {
                                                     <span>￥{food.price * food.count}</span>
                                                 </div>
                                                 <div className="cartcontrol-wrapper">
-                                                    <Cartcontrol add={this.addFood} food={this.state.food}></Cartcontrol>
+                                                    <Cartcontrol add={this.addFood}
+                                                                 food={this.state.food}></Cartcontrol>
                                                 </div>
                                             </li>
                                         )
