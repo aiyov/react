@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-// import BScroll from 'better-scroll';
+import BScroll from 'better-scroll';
 import Cartcontrol from '../cartcontrol/cartcontrol';
 import './shopcart.styl';
 
@@ -14,19 +14,25 @@ export default class Shopcart extends Component {
             totalCount: 0,
             payDesc: '还差20元起送',
             payClass: 'not-enough',
-            listShow: false
+            listShow: false,
         }
         this.toggleList = this.toggleList.bind(this)
         this.pay = this.pay.bind(this)
     }
 
     toggleList() {
-        if (!this.state.totalCount) {
-            return;
-        }
-        var onOff = !this.state.fold;
+        var onOff = !this.state.totalCount || this.state.listShow ? false : true
         this.setState({
-            fold: onOff
+            listShow: onOff
+        })
+
+        setTimeout(() => {
+            var ele = document.querySelector('.list-content');
+            if (ele) {
+                new BScroll(ele, {
+                    click: true
+                })
+            }
         })
     }
 
@@ -41,7 +47,7 @@ export default class Shopcart extends Component {
         var total = 0;
         var totalCount = 0;
         this.props.selectFoods.forEach((item, index) => {
-            total += item.price*item.count;
+            total += item.price * item.count;
             totalCount += item.count;
         });
         var payDesc = '';
@@ -112,7 +118,7 @@ export default class Shopcart extends Component {
                                 <h1 className="title">购物车</h1>
                                 <span className="empty" onClick={this.empty}>清空</span>
                             </div>
-                            <div className="list-content" ref="listContent">
+                            <div className="list-content">
                                 <ul>
                                     {this.props.selectFoods.map((food, index) => {
                                         return (
@@ -123,7 +129,7 @@ export default class Shopcart extends Component {
                                                 </div>
                                                 <div className="cartcontrol-wrapper">
                                                     <Cartcontrol add={this.addFood}
-                                                                 food={this.state.food}></Cartcontrol>
+                                                                 food={food}></Cartcontrol>
                                                 </div>
                                             </li>
                                         )
