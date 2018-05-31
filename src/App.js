@@ -5,13 +5,7 @@ import './index.styl';
 import './App.styl';
 import Header from './components/header/header';
 import Goods from './components/goods/goods';
-
-
-const Ratings = () => (
-    <div>
-        <h2>Ratings</h2>
-    </div>
-)
+import Ratings from './components/ratings/ratings';
 
 const Seller = () => (
     <div>
