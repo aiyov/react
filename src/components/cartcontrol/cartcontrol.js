@@ -11,14 +11,15 @@ export default class Cartcontrol extends Component {
     this.addCart = this.addCart.bind(this);
   }
 
-  addCart() {
+  addCart(event) {
+    console.log(event)
     !this.props.food.count ? this.props.food.count = 1 : this.props.food.count++;
-    this.props.add()
+    this.props.add(event)
   }
 
-  decreaseCart() {
+  decreaseCart(event) {
     this.props.food.count--;
-    this.props.add()
+    this.props.add(event)
   }
 
   render() {

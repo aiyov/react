@@ -6,12 +6,7 @@ import './App.styl';
 import Header from './components/header/header';
 import Goods from './components/goods/goods';
 import Ratings from './components/ratings/ratings';
-
-const Seller = () => (
-    <div>
-        <h2>Seller</h2>
-    </div>
-)
+import Seller from './components/seller/seller';
 
 class App extends Component {
     render() {

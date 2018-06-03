@@ -1,23 +1,66 @@
 import React, {Component} from 'react';
 import {formatDate} from '../../common/js/date';
 import BScroll from 'better-scroll';
+import Star from '../star/star';
+import Split from '../split/split';
+import Ratingselect from '../ratingselect/ratingselect'
 import data from '../../data.json';
-import './ratings.styl'
+import './ratings.styl';
 
-console.log(data.ratings)
+
 export default class Ratings extends Component{
     constructor(props) {
         super();
         this.state = {
             seller: data.seller,
-            ratings: data.ratings
+            ratings: data.ratings,
+            selectType: 2,
+            onlyContent: false,
+            showratings: data.ratings
         }
+        this.selectRating = this.selectRating.bind(this)
+        this.toggleContent = this.toggleContent.bind(this)
+        this.filterRatings = this.filterRatings.bind(this)
     }
     componentDidMount() {
         new BScroll(document.querySelector('.ratings'), {
             click: true
         });
     }
+    selectRating(num) {
+        this.setState({
+            selectType: num,
+        })
+        this.filterRatings(num, null)
+    }
+
+    filterRatings(selectType, onlyContent) {
+        var ratings = [];
+        var num = selectType!==null? selectType : this.state.selectType;
+        var onOff = onlyContent!==null? onlyContent : this.state.onlyContent;
+        ratings = this.state.ratings.filter((rating)=>{
+            if( num===2 && !onOff ) {
+                return rating
+            }else if( num===2 && onOff ) {
+                return rating && rating.text
+            } else if(!onOff) {
+                return rating.rateType === num
+            } else {
+                return rating.rateType === num && rating.text
+            }
+        })
+        this.setState({
+            showratings: ratings
+        })
+    }
+
+    toggleContent(onlyContent) {
+        this.setState({
+            onlyContent
+        })
+        this.filterRatings(null,onlyContent)
+    }
+
     render() {
         return (
             <div className="ratings">
@@ -31,12 +74,12 @@ export default class Ratings extends Component{
                         <div className="overview-right">
                             <div className="score-wrapper">
                                 <span className="title">服务态度</span>
-                                {/*<star :size="36" :score="seller.serviceScore"></star>*/}
+                                <Star size="36" score={this.state.seller.serviceScore}></Star>
                                 <span className="score">{this.state.seller.serviceScore}</span>
                             </div>
                             <div className="score-wrapper">
                                 <span className="title">商品评分</span>
-                                {/*<star :size="36" :score="seller.foodScore"></star>*/}
+                                <Star size="36" score={this.state.seller.foodScore}></Star>
                                 <span className="score">{this.state.seller.foodScore}</span>
                             </div>
                             <div className="delivery-wrapper">
@@ -45,12 +88,12 @@ export default class Ratings extends Component{
                             </div>
                         </div>
                     </div>
-                    {/*<split></split>*/}
-                    {/*<ratingselect @select="selectRating" @toggle="toggleContent" :selectType="selectType" :onlyContent="onlyContent"
-  :ratings="ratings"></ratingselect>*/}
+                    <Split></Split>
+                    <Ratingselect select={this.selectRating} toggle={this.toggleContent} selectType={this.state.selectType} onlyContent={this.state.onlyContent}
+  ratings={this.state.ratings}></Ratingselect>
                     <div className="rating-wrapper">
                         <ul>
-                            {this.state.ratings.map((rating, index) => {
+                            {this.state.showratings.map((rating, index) => {
                                 return (
                                     <li key={index} v-show="needShow(rating.rateType, rating.text)" className="rating-item">
                                         <div className="avatar">
@@ -59,7 +102,7 @@ export default class Ratings extends Component{
                                         <div className="content">
                                             <h1 className="name">{rating.username}</h1>
                                             <div className="star-wrapper">
-                                                {/*<star :size="24" :score="rating.score"></star>*/}
+                                                <Star size="24" score={rating.score}></Star>
                                                 {rating.deliveryTime ? (
                                                     <span className="delivery">{rating.deliveryTime}</span>
                                                 ) : null}
