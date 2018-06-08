@@ -31,7 +31,6 @@ export default class Goods extends Component {
     }
 
     componentDidMount() {
-        console.log(this.goodsType.current)
         console.log(this.goodsList)
         this._initScroll()
         this._calculateHeight()
@@ -84,7 +83,6 @@ export default class Goods extends Component {
         this.setState({
             listHeight: arrHeight
         })
-        console.log(arrHeight)
     }
 
     _followScroll(index) {

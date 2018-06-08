@@ -12,7 +12,6 @@ export default class Cartcontrol extends Component {
   }
 
   addCart(event) {
-    console.log(event)
     !this.props.food.count ? this.props.food.count = 1 : this.props.food.count++;
     this.props.add(event)
   }

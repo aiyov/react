@@ -1,0 +1,6 @@
+const ACTIONS_TYPES = {
+  ADD_TO_CART : 'ADD_TO_CART',
+  REDUCE_FROM_CART : 'READUCE_FROM_CART'
+}
+
+export default {...ACTIONS_TYPES}
