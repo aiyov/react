@@ -8,6 +8,16 @@ import Goods from './components/goods/goods';
 import Ratings from './components/ratings/ratings';
 import Seller from './components/seller/seller';
 
+
+import { createStore } from 'redux'
+import todoApp from './reducers'
+import {getAllProducts} from './actions/index'
+let store = createStore(todoApp)
+
+console.log(store.getState())
+store.dispatch(getAllProducts())
+console.log(store.getState())
+
 class App extends Component {
     render() {
         return (
