@@ -14,7 +14,6 @@ import todoApp from './reducers'
 import {getAllProducts} from './actions/index'
 let store = createStore(todoApp)
 
-console.log(store.getState())
 store.dispatch(getAllProducts())
 console.log(store.getState())
 
