@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import thunkMiddleware from 'redux-thunk'
+import { createLogger } from 'redux-logger'
 import {BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
 import './common/stylus/index.styl';
 import './index.styl';
@@ -9,12 +11,19 @@ import Ratings from './components/ratings/ratings';
 import Seller from './components/seller/seller';
 
 
-import { createStore } from 'redux'
-import todoApp from './reducers'
+import { createStore , applyMiddleware} from 'redux'
+import rootReducer from './reducers'
 import {getAllProducts} from './actions/index'
-let store = createStore(todoApp)
+import {fetchPosts} from './actions/http'
+
+const loggerMiddleware = createLogger()
+let store = createStore(rootReducer,applyMiddleware(
+    thunkMiddleware, // 允许我们 dispatch() 函数
+    loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
+))
 
 store.dispatch(getAllProducts())
+store.dispatch(fetchPosts('book'))
 console.log(store.getState())
 
 class App extends Component {
